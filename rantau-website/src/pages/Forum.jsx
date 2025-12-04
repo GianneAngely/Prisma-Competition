@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Search,
   ThumbsUp,
@@ -15,6 +15,9 @@ import {
 export default function Forum() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [showNewPost, setShowNewPost] = useState(false);
+  const [visiblePosts, setVisiblePosts] = useState(new Set());
+  const postsRef = useRef({});
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const categories = [
     { id: "all", label: "Semua Post", icon: "📋", count: 1234 },
@@ -123,12 +126,174 @@ export default function Forum() {
       ? posts
       : posts.filter((post) => post.category === activeCategory);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisiblePosts((prev) => new Set([...prev, entry.target.id]));
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "50px" }
+    );
+
+    Object.values(postsRef.current).forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [filteredPosts]);
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <style>{`
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        @keyframes shimmer {
+          0% {
+            background-position: -1000px 0;
+          }
+          100% {
+            background-position: 1000px 0;
+          }
+        }
+        
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+        
+        @keyframes glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+          }
+        }
+        
+        @media (prefers-reduced-motion: no-preference) {
+          .animate-fade-in-down {
+            animation: fadeInDown 0.6s cubic-bezier(0.23, 1, 0.320, 1) forwards;
+          }
+          
+          .animate-fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.320, 1) forwards;
+          }
+          
+          .animate-scale-in {
+            animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          }
+          
+          .stagger-item {
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.320, 1) forwards;
+          }
+          
+          .post-card {
+            will-change: transform, box-shadow;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .post-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+          }
+          
+          .button-interactive {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .button-interactive:hover {
+            transform: scale(1.05);
+          }
+          
+          .button-interactive:active {
+            transform: scale(0.95);
+          }
+          
+          .category-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .category-btn.active {
+            animation: glow 2s ease-in-out infinite;
+          }
+          
+          .trending-badge {
+            animation: float 2s ease-in-out infinite;
+          }
+          
+          .search-input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+          }
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+
       <section className="bg-gradient-to-br from-forest-dark via-forest-main to-forest-light py-12 sm:py-16 lg:py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8 sm:mb-12">
-            <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full mb-4">
+          <div className="text-center mb-8 sm:mb-12 animate-fade-in-down">
+            <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full mb-4 hover:bg-white/20 transition-colors duration-300">
               <span className="text-white font-semibold text-xs sm:text-sm">
                 FORUM KOMUNITAS PERANTAU
               </span>
@@ -141,18 +306,18 @@ export default function Forum() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-3xl mx-auto">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Cari diskusi, topik, atau pertanyaan..."
-                className="w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl border-2 border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder:text-white/60 focus:outline-none focus:border-white/40 text-sm sm:text-base"
+                className="search-input w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl border-2 border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder:text-white/60 focus:outline-none focus:border-white/40 text-sm sm:text-base"
               />
             </div>
             <button
               onClick={() => setShowNewPost(true)}
-              className="bg-gold hover:bg-gold-light text-forest-dark px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold shadow-xl transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap"
+              className="button-interactive bg-gold hover:bg-gold-light text-forest-dark px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold shadow-xl flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap"
             >
               <Plus className="w-5 h-5" />
               <span className="hidden sm:inline">Buat Post Baru</span>
@@ -165,15 +330,16 @@ export default function Forum() {
       <section className="py-8 sm:py-12 px-4 border-b border-gray-200 bg-white sticky top-0 z-10">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.id)}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold transition-all whitespace-nowrap text-xs sm:text-sm ${
+                className={`category-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold whitespace-nowrap text-xs sm:text-sm ${
                   activeCategory === category.id
                     ? "bg-forest-main text-white shadow-lg"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
+                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.05}s` }}
               >
                 <span className="text-base sm:text-lg">{category.icon}</span>
                 <span className="hidden sm:inline">{category.label}</span>
@@ -197,16 +363,16 @@ export default function Forum() {
 
       <section className="py-8 sm:py-12 lg:py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-3 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
             <h2 className="font-heading text-xl sm:text-2xl font-bold text-gray-900">
               {filteredPosts.length} Diskusi Ditemukan
             </h2>
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <button className="flex-1 sm:flex-none flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-forest-main px-3 sm:px-4 py-2 rounded-lg font-medium text-gray-700 transition-all text-xs sm:text-sm">
+              <button className="button-interactive flex-1 sm:flex-none flex items-center gap-2 bg-white border-2 border-gray-200 hover:border-forest-main px-3 sm:px-4 py-2 rounded-lg font-medium text-gray-700 text-xs sm:text-sm">
                 <Filter className="w-4 h-4" />
                 <span className="hidden sm:inline">Filter</span>
               </button>
-              <select className="flex-1 sm:flex-none bg-white border-2 border-gray-200 px-3 sm:px-4 py-2 rounded-lg font-medium text-gray-700 focus:outline-none focus:border-forest-main text-xs sm:text-sm">
+              <select className="flex-1 sm:flex-none bg-white border-2 border-gray-200 px-3 sm:px-4 py-2 rounded-lg font-medium text-gray-700 focus:outline-none focus:border-forest-main text-xs sm:text-sm hover:border-gray-300 transition-colors duration-300">
                 <option>Terbaru</option>
                 <option>Terpopuler</option>
                 <option>Trending</option>
@@ -215,13 +381,18 @@ export default function Forum() {
           </div>
 
           <div className="space-y-4 sm:space-y-6">
-            {filteredPosts.map((post) => (
+            {filteredPosts.map((post, index) => (
               <div
                 key={post.id}
-                className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-md hover:shadow-xl transition-all cursor-pointer border-2 border-transparent hover:border-forest-main/20"
+                id={`post-${post.id}`}
+                ref={(el) => (postsRef.current[post.id] = el)}
+                className={`bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-md hover:shadow-xl cursor-pointer border-2 border-transparent hover:border-forest-main/20 post-card ${
+                  visiblePosts.has(`post-${post.id}`) ? "stagger-item" : "opacity-0"
+                }`}
+                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1}s` }}
               >
                 <div className="flex items-start gap-3 sm:gap-4 mb-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-forest-main to-gold flex items-center justify-center text-white font-bold flex-shrink-0 text-sm sm:text-base">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-forest-main to-gold flex items-center justify-center text-white font-bold flex-shrink-0 text-sm sm:text-base transition-transform duration-300 hover:scale-110">
                     {post.author.avatar}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -242,7 +413,7 @@ export default function Forum() {
                       {post.trending && (
                         <>
                           <span>•</span>
-                          <div className="flex items-center gap-1 text-orange-600 font-semibold">
+                          <div className="trending-badge flex items-center gap-1 text-orange-600 font-semibold">
                             <TrendingUp className="w-3 h-3" />
                             <span>Trending</span>
                           </div>
@@ -253,7 +424,7 @@ export default function Forum() {
                 </div>
 
                 <div className="mb-4">
-                  <h2 className="font-bold text-gray-900 text-base sm:text-lg lg:text-xl mb-2 line-clamp-2">
+                  <h2 className="font-bold text-gray-900 text-base sm:text-lg lg:text-xl mb-2 line-clamp-2 hover:text-forest-main transition-colors duration-300">
                     {post.title}
                   </h2>
                   <p className="text-sm sm:text-base text-gray-600 line-clamp-2">
@@ -262,17 +433,17 @@ export default function Forum() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-600">
-                  <button className="flex items-center gap-1.5 hover:text-forest-main transition-colors">
+                  <button className="button-interactive flex items-center gap-1.5 hover:text-forest-main">
                     <ThumbsUp className="w-4 h-4" />
                     <span className="font-semibold">{post.likes}</span>
                     <span className="hidden sm:inline">Suka</span>
                   </button>
-                  <button className="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                  <button className="button-interactive flex items-center gap-1.5 hover:text-blue-600">
                     <MessageCircle className="w-4 h-4" />
                     <span className="font-semibold">{post.replies}</span>
                     <span className="hidden sm:inline">Balasan</span>
                   </button>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 transition-transform duration-300 hover:scale-110">
                     <Eye className="w-4 h-4" />
                     <span className="font-semibold">{post.views}</span>
                     <span className="hidden sm:inline">Views</span>
@@ -282,8 +453,8 @@ export default function Forum() {
             ))}
           </div>
 
-          <div className="mt-8 sm:mt-12 text-center">
-            <button className="bg-forest-main hover:bg-forest-dark text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold transition-all text-sm sm:text-base">
+          <div className="mt-8 sm:mt-12 text-center animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+            <button className="button-interactive bg-forest-main hover:bg-forest-dark text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base shadow-lg hover:shadow-xl">
               Muat Lebih Banyak
             </button>
           </div>
@@ -291,26 +462,26 @@ export default function Forum() {
       </section>
 
       {showNewPost && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in-up">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Buat Post Baru
               </h3>
               <button
                 onClick={() => setShowNewPost(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="button-interactive text-gray-400 hover:text-gray-600 hover:rotate-90"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             <form className="space-y-4 sm:space-y-6">
-              <div>
+              <div className="stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Kategori
                 </label>
-                <select className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-forest-main text-sm sm:text-base">
+                <select className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-forest-main text-sm sm:text-base transition-colors duration-300 hover:border-gray-300">
                   <option>Pilih Kategori</option>
                   {categories.slice(1).map((cat) => (
                     <option key={cat.id} value={cat.id}>
@@ -320,39 +491,39 @@ export default function Forum() {
                 </select>
               </div>
 
-              <div>
+              <div className="stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.15s" }}>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Judul
                 </label>
                 <input
                   type="text"
                   placeholder="Tulis judul yang menarik..."
-                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-forest-main text-sm sm:text-base"
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-forest-main text-sm sm:text-base transition-colors duration-300 hover:border-gray-300"
                 />
               </div>
 
-              <div>
+              <div className="stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Konten
                 </label>
                 <textarea
                   rows="6"
                   placeholder="Bagikan cerita, tips, atau pertanyaan kamu..."
-                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-forest-main resize-none text-sm sm:text-base"
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-forest-main resize-none text-sm sm:text-base transition-colors duration-300 hover:border-gray-300"
                 ></textarea>
               </div>
 
-              <div className="flex flex-col-reverse sm:flex-row gap-3">
+              <div className="flex flex-col-reverse sm:flex-row gap-3 stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.25s" }}>
                 <button
                   type="button"
                   onClick={() => setShowNewPost(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold transition-all text-sm sm:text-base"
+                  className="button-interactive flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold text-sm sm:text-base"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-forest-main to-forest-light hover:from-forest-dark hover:to-forest-main text-white px-6 py-3 rounded-xl font-bold transition-all text-sm sm:text-base"
+                  className="button-interactive flex-1 bg-gradient-to-r from-forest-main to-forest-light hover:from-forest-dark hover:to-forest-main text-white px-6 py-3 rounded-xl font-bold text-sm sm:text-base shadow-lg hover:shadow-xl"
                 >
                   Posting
                 </button>

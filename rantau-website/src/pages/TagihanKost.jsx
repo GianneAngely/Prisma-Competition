@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   DollarSign,
@@ -28,6 +28,7 @@ export default function SplitReminder() {
   const [selectedBill, setSelectedBill] = useState(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [activeTab, setActiveTab] = useState("current");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const paymentMethods = [
     {
@@ -204,9 +205,301 @@ export default function SplitReminder() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <style>{`
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes fadeInRight {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(100%);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes pulse-urgent {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+          }
+        }
+        
+        @keyframes bounce-subtle {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-4px);
+          }
+        }
+        
+        @keyframes ring {
+          0% {
+            transform: rotate(0deg);
+          }
+          10% {
+            transform: rotate(15deg);
+          }
+          20% {
+            transform: rotate(-15deg);
+          }
+          30% {
+            transform: rotate(10deg);
+          }
+          40% {
+            transform: rotate(-10deg);
+          }
+          50% {
+            transform: rotate(5deg);
+          }
+          60% {
+            transform: rotate(-5deg);
+          }
+          70% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(0deg);
+          }
+        }
+        
+        @media (prefers-reduced-motion: no-preference) {
+          .animate-fade-in-down {
+            animation: fadeInDown 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .animate-fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .animate-fade-in-left {
+            animation: fadeInLeft 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .animate-fade-in-right {
+            animation: fadeInRight 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .animate-scale-in {
+            animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          }
+          
+          .animate-slide-up {
+            animation: slideUp 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .stagger-item {
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .bill-animate {
+            animation: fadeInUp 0.4s cubic-bezier(0.23, 1, 0.32, 1) both;
+          }
+          
+          .stat-card {
+            will-change: transform, box-shadow;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .stat-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15);
+          }
+          
+          .stat-card:hover .stat-icon {
+            transform: scale(1.1) rotate(5deg);
+          }
+          
+          .stat-icon {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          }
+          
+          .bill-card {
+            will-change: transform, box-shadow;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .bill-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+          }
+          
+          .bill-card.urgent {
+            animation: pulse-urgent 2s ease-in-out infinite;
+          }
+          
+          .bill-icon {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          }
+          
+          .bill-card:hover .bill-icon {
+            transform: scale(1.15);
+          }
+          
+          .reminder-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .reminder-card:hover {
+            transform: translateX(4px);
+          }
+          
+          .reminder-card.urgent {
+            animation: pulse-urgent 2s ease-in-out infinite;
+          }
+          
+          .avatar-bounce {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          }
+          
+          .avatar-bounce:hover {
+            transform: translateY(-4px) scale(1.1);
+          }
+          
+          .button-interactive {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .button-interactive:hover {
+            transform: scale(1.05);
+          }
+          
+          .button-interactive:active {
+            transform: scale(0.95);
+          }
+          
+          .tab-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .tab-button:hover:not(.active) {
+            transform: translateY(-2px);
+          }
+          
+          .tab-button.active {
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+          }
+          
+          .payment-method {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .payment-method:hover {
+            transform: translateY(-2px);
+          }
+          
+          .payment-method.selected {
+            animation: bounce-subtle 0.5s ease-in-out;
+          }
+          
+          .payment-icon {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          }
+          
+          .payment-method:hover .payment-icon {
+            transform: scale(1.1);
+          }
+          
+          .modal-overlay {
+            animation: fadeInUp 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .modal-content {
+            animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          }
+          
+          .bell-ring {
+            animation: ring 2s ease-in-out infinite;
+          }
+          
+          .group-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .group-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+          }
+          
+          .roommate-status {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .roommate-status:hover {
+            transform: scale(1.05);
+          }
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+
       <section className="bg-gradient-to-br from-forest-dark via-forest-main to-forest-light py-12 sm:py-16 lg:py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8 sm:mb-12">
+          <div className="text-center mb-8 sm:mb-12 animate-fade-in-down">
             <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4">
               Split Bills & <span className="text-gold">Never Forget</span>
             </h1>
@@ -219,11 +512,12 @@ export default function SplitReminder() {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-4 sm:p-6 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1"
+                className="stat-card bg-white rounded-2xl p-4 sm:p-6 shadow-xl stagger-item"
+                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1}s` }}
               >
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <div
-                    className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg`}
+                    className={`stat-icon w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg`}
                   >
                     {stat.icon}
                   </div>
@@ -247,7 +541,7 @@ export default function SplitReminder() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
             <div className="lg:col-span-2 space-y-6">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 animate-fade-in-up">
                 <div>
                   <h2 className="font-heading text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                     Tagihan Bulanan
@@ -256,44 +550,31 @@ export default function SplitReminder() {
                 </div>
                 <button
                   onClick={() => setShowAddBill(true)}
-                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-forest-main to-forest-light hover:from-forest-dark hover:to-forest-main text-white px-4 sm:px-6 py-3 rounded-xl font-bold shadow-xl transition-all w-full sm:w-auto"
+                  className="button-interactive inline-flex items-center justify-center gap-2 bg-gradient-to-r from-forest-main to-forest-light hover:from-forest-dark hover:to-forest-main text-white px-4 sm:px-6 py-3 rounded-xl font-bold shadow-xl w-full sm:w-auto"
                 >
                   <Plus className="w-5 h-5" />
                   Tambah Tagihan
                 </button>
               </div>
 
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                <button
-                  onClick={() => setActiveTab("current")}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap transition-all ${
-                    activeTab === "current"
-                      ? "bg-forest-main text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  Tagihan Aktif (4)
-                </button>
-                <button
-                  onClick={() => setActiveTab("pending")}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap transition-all ${
-                    activeTab === "pending"
-                      ? "bg-forest-main text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  Belum Bayar (2)
-                </button>
-                <button
-                  onClick={() => setActiveTab("paid")}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap transition-all ${
-                    activeTab === "paid"
-                      ? "bg-forest-main text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  Sudah Bayar (2)
-                </button>
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide animate-fade-in-up" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}>
+                {[
+                  { id: "current", label: "Tagihan Aktif (4)" },
+                  { id: "pending", label: "Belum Bayar (2)" },
+                  { id: "paid", label: "Sudah Bayar (2)" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`tab-button px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap ${
+                      activeTab === tab.id
+                        ? "bg-forest-main text-white active"
+                        : "bg-white text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
 
               <div className="space-y-4">
@@ -304,25 +585,26 @@ export default function SplitReminder() {
                     if (activeTab === "paid") return bill.status === "paid";
                     return true;
                   })
-                  .map((bill) => {
+                  .map((bill, index) => {
                     const daysUntil = getDaysUntil(bill.dueDate);
                     const isUrgent =
                       daysUntil <= 3 && bill.status === "pending";
 
                     return (
                       <div
-                        key={bill.id}
-                        className={`bg-white rounded-2xl p-4 sm:p-6 shadow-md hover:shadow-xl transition-all border-2 ${
+                        key={`${activeTab}-${bill.id}`}
+                        className={`bill-card bill-animate bg-white rounded-2xl p-4 sm:p-6 shadow-md border-2 ${
                           isUrgent
-                            ? "border-red-300 bg-red-50"
+                            ? "border-red-300 bg-red-50 urgent"
                             : bill.status === "paid"
                               ? "border-green-200 bg-green-50"
                               : "border-gray-200"
                         }`}
+                        style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1}s` }}
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center gap-3 sm:gap-4">
-                            <div className="text-3xl sm:text-4xl lg:text-5xl">
+                            <div className="bill-icon text-3xl sm:text-4xl lg:text-5xl">
                               {bill.icon}
                             </div>
                             <div>
@@ -336,16 +618,16 @@ export default function SplitReminder() {
                             </div>
                           </div>
                           <div className="flex gap-1 sm:gap-2">
-                            <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-all">
+                            <button className="button-interactive p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg">
                               <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-600" />
                             </button>
-                            <button className="p-1.5 sm:p-2 hover:bg-red-50 rounded-lg transition-all">
+                            <button className="button-interactive p-1.5 sm:p-2 hover:bg-red-50 rounded-lg">
                               <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600" />
                             </button>
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4 p-3 sm:p-4 bg-gray-50 rounded-xl">
+                        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4 p-3 sm:p-4 bg-gray-50 rounded-xl transition-colors duration-300 hover:bg-gray-100">
                           <div>
                             <div className="text-[10px] sm:text-xs text-gray-600 mb-1">
                               Total Tagihan
@@ -397,14 +679,14 @@ export default function SplitReminder() {
                               return (
                                 <div
                                   key={roommate.name}
-                                  className={`text-center p-2 rounded-lg ${
+                                  className={`roommate-status text-center p-2 rounded-lg ${
                                     hasPaid
                                       ? "bg-green-100 border-2 border-green-400"
                                       : "bg-gray-100 border-2 border-gray-300"
                                   }`}
                                 >
                                   <div
-                                    className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full ${roommate.color} text-white flex items-center justify-center text-[10px] sm:text-xs font-bold mx-auto mb-1`}
+                                    className={`avatar-bounce w-6 h-6 sm:w-8 sm:h-8 rounded-full ${roommate.color} text-white flex items-center justify-center text-[10px] sm:text-xs font-bold mx-auto mb-1`}
                                   >
                                     {roommate.avatar}
                                   </div>
@@ -424,7 +706,7 @@ export default function SplitReminder() {
                           bill.unpaidBy.includes("You") && (
                             <button
                               onClick={() => handlePayNow(bill)}
-                              className="w-full bg-gradient-to-r from-forest-main to-forest-light hover:from-forest-dark hover:to-forest-main text-white py-2.5 sm:py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
+                              className="button-interactive w-full bg-gradient-to-r from-forest-main to-forest-light hover:from-forest-dark hover:to-forest-main text-white py-2.5 sm:py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-sm sm:text-base"
                             >
                               <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
                               Bayar Sekarang - Rp{" "}
@@ -441,30 +723,42 @@ export default function SplitReminder() {
                       </div>
                     );
                   })}
+                
+                {/* Show empty state if no bills */}
+                {currentBills.filter((bill) => {
+                  if (activeTab === "pending") return bill.status === "pending";
+                  if (activeTab === "paid") return bill.status === "paid";
+                  return true;
+                }).length === 0 && (
+                  <div className="text-center py-12 text-gray-500">
+                    Tidak ada tagihan
+                  </div>
+                )}
               </div>
             </div>
 
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-gray-200">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-gray-200 animate-fade-in-right" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}>
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-bold text-gray-900 text-base sm:text-lg flex items-center gap-2">
-                    <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+                    <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gold bell-ring" />
                     Reminder Aktif
                   </h3>
-                  <span className="bg-red-100 text-red-600 px-2 sm:px-3 py-1 rounded-full text-xs font-bold">
+                  <span className="bg-red-100 text-red-600 px-2 sm:px-3 py-1 rounded-full text-xs font-bold animate-pulse">
                     {upcomingReminders.length}
                   </span>
                 </div>
 
                 <div className="space-y-3">
-                  {upcomingReminders.map((reminder) => (
+                  {upcomingReminders.map((reminder, index) => (
                     <div
                       key={reminder.id}
-                      className={`p-3 sm:p-4 rounded-xl border-2 ${
+                      className={`reminder-card p-3 sm:p-4 rounded-xl border-2 stagger-item ${
                         reminder.type === "urgent"
-                          ? "bg-red-50 border-red-300"
+                          ? "bg-red-50 border-red-300 urgent"
                           : "bg-gray-50 border-gray-200"
                       }`}
+                      style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.3 + index * 0.1}s` }}
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1 min-w-0">
@@ -479,7 +773,7 @@ export default function SplitReminder() {
                           </div>
                         </div>
                         {reminder.type === "urgent" && (
-                          <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0" />
+                          <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0 animate-pulse" />
                         )}
                       </div>
                       <div className="font-bold text-gold text-xs sm:text-sm">
@@ -489,20 +783,21 @@ export default function SplitReminder() {
                   ))}
                 </div>
 
-                <button className="w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all">
+                <button className="button-interactive w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg font-medium text-xs sm:text-sm">
                   Lihat Semua Reminder
                 </button>
               </div>
 
-              <div className="bg-gradient-to-br from-forest-main to-forest-light rounded-2xl p-4 sm:p-6 text-white shadow-xl">
+              <div className="group-card bg-gradient-to-br from-forest-main to-forest-light rounded-2xl p-4 sm:p-6 text-white shadow-xl animate-fade-in-right" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.4s" }}>
                 <h3 className="font-bold text-lg sm:text-xl mb-4">
                   Kelola Grup
                 </h3>
                 <div className="flex -space-x-2 mb-4">
-                  {roommates.map((roommate) => (
+                  {roommates.map((roommate, index) => (
                     <div
                       key={roommate.name}
-                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full ${roommate.color} border-2 border-white flex items-center justify-center text-xs sm:text-sm font-bold`}
+                      className={`avatar-bounce w-8 h-8 sm:w-10 sm:h-10 rounded-full ${roommate.color} border-2 border-white flex items-center justify-center text-xs sm:text-sm font-bold stagger-item`}
+                      style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.5 + index * 0.1}s` }}
                     >
                       {roommate.avatar}
                     </div>
@@ -511,7 +806,7 @@ export default function SplitReminder() {
                 <p className="text-white/90 text-xs sm:text-sm mb-4">
                   {roommates.length} anggota dalam grup
                 </p>
-                <button className="w-full bg-white text-forest-main py-2 rounded-lg font-bold text-xs sm:text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-2">
+                <button className="button-interactive w-full bg-white text-forest-main py-2 rounded-lg font-bold text-xs sm:text-sm hover:bg-gray-100 flex items-center justify-center gap-2">
                   <Share2 className="w-3 h-3 sm:w-4 sm:h-4" />
                   Undang Anggota
                 </button>
@@ -522,8 +817,8 @@ export default function SplitReminder() {
       </section>
 
       {showPayment && selectedBill && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 modal-overlay">
+          <div className="modal-content bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Pilih Metode Pembayaran
@@ -533,13 +828,13 @@ export default function SplitReminder() {
                   setShowPayment(false);
                   setSelectedPaymentMethod(null);
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="button-interactive text-gray-400 hover:text-gray-600 hover:rotate-90 transition-all duration-300"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-4 mb-6">
+            <div className="bg-gray-50 rounded-2xl p-4 mb-6 stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-sm text-gray-600 mb-1">
@@ -549,7 +844,7 @@ export default function SplitReminder() {
                     Rp {selectedBill.yourShare.toLocaleString("id-ID")}
                   </div>
                 </div>
-                <div className="text-3xl sm:text-4xl">{selectedBill.icon}</div>
+                <div className="text-3xl sm:text-4xl bill-icon">{selectedBill.icon}</div>
               </div>
               <div className="text-xs text-gray-500 mt-2">
                 Tagihan {selectedBill.name} - Split {selectedBill.splitCount}{" "}
@@ -558,19 +853,20 @@ export default function SplitReminder() {
             </div>
 
             <div className="space-y-3 mb-6">
-              {paymentMethods.map((method) => (
+              {paymentMethods.map((method, index) => (
                 <button
                   key={method.id}
                   onClick={() => handlePaymentMethodSelect(method)}
-                  className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                  className={`payment-method w-full p-4 rounded-xl border-2 text-left stagger-item ${
                     selectedPaymentMethod?.id === method.id
-                      ? "border-forest-main bg-forest-main/5"
+                      ? "border-forest-main bg-forest-main/5 selected"
                       : "border-gray-200 hover:border-gray-300 bg-white"
                   }`}
+                  style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.15 + index * 0.05}s` }}
                 >
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${method.color} flex items-center justify-center text-2xl shadow-lg flex-shrink-0`}
+                      className={`payment-icon w-12 h-12 rounded-xl bg-gradient-to-br ${method.color} flex items-center justify-center text-2xl shadow-lg flex-shrink-0`}
                     >
                       {method.icon}
                     </div>
@@ -583,7 +879,7 @@ export default function SplitReminder() {
                       </div>
                     </div>
                     {selectedPaymentMethod?.id === method.id && (
-                      <Check className="w-6 h-6 text-forest-main flex-shrink-0" />
+                      <Check className="w-6 h-6 text-forest-main flex-shrink-0 animate-scale-in" />
                     )}
                   </div>
                 </button>
@@ -593,11 +889,12 @@ export default function SplitReminder() {
             <button
               onClick={handleConfirmPayment}
               disabled={!selectedPaymentMethod}
-              className={`w-full py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all ${
+              className={`button-interactive w-full py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg stagger-item ${
                 selectedPaymentMethod
                   ? "bg-gradient-to-r from-forest-main to-forest-light text-white hover:shadow-xl"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
+              style={{ animationDelay: prefersReducedMotion ? "0s" : "0.4s" }}
             >
               {selectedPaymentMethod
                 ? `Bayar dengan ${selectedPaymentMethod.name}`
@@ -608,15 +905,15 @@ export default function SplitReminder() {
       )}
 
       {showAddBill && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 modal-overlay">
+          <div className="modal-content bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Tambah Tagihan Baru
               </h3>
               <button
                 onClick={() => setShowAddBill(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="button-interactive text-gray-400 hover:text-gray-600 hover:rotate-90 transition-all duration-300"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -630,7 +927,7 @@ export default function SplitReminder() {
                 <input
                   type="text"
                   placeholder="e.g. Listrik, Air, WiFi"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-forest-main text-sm sm:text-base"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-forest-main text-sm sm:text-base transition-colors duration-300 hover:border-gray-300"
                 />
               </div>
 
@@ -641,7 +938,7 @@ export default function SplitReminder() {
                 <input
                   type="number"
                   placeholder="500000"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-forest-main text-sm sm:text-base"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-forest-main text-sm sm:text-base transition-colors duration-300 hover:border-gray-300"
                 />
               </div>
 
@@ -652,7 +949,7 @@ export default function SplitReminder() {
                 <input
                   type="number"
                   placeholder="4"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-forest-main text-sm sm:text-base"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-forest-main text-sm sm:text-base transition-colors duration-300 hover:border-gray-300"
                 />
               </div>
 
@@ -662,13 +959,13 @@ export default function SplitReminder() {
                 </label>
                 <input
                   type="date"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-forest-main text-sm sm:text-base"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-forest-main text-sm sm:text-base transition-colors duration-300 hover:border-gray-300"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-forest-main to-forest-light text-white py-3 rounded-xl font-bold hover:shadow-xl transition-all text-sm sm:text-base"
+                className="button-interactive w-full bg-gradient-to-r from-forest-main to-forest-light text-white py-3 rounded-xl font-bold hover:shadow-xl text-sm sm:text-base"
               >
                 Tambah Tagihan
               </button>

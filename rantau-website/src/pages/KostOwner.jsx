@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import {
   Home,
   TrendingUp,
@@ -15,6 +16,10 @@ import {
 } from "lucide-react";
 
 export default function KostOwner() {
+  const [visibleCards, setVisibleCards] = useState(new Set());
+  const cardsRef = useRef({});
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   const stats = [
     {
       label: "Total Properti",
@@ -132,11 +137,236 @@ export default function KostOwner() {
     },
   ];
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleCards((prev) => new Set([...prev, entry.target.id]));
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "50px" }
+    );
+
+    Object.values(cardsRef.current).forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
+      <style>{`
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes fadeInRight {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        @keyframes countUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes drawLine {
+          from {
+            stroke-dashoffset: 1000;
+          }
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+        
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+          }
+          50% {
+            box-shadow: 0 0 25px rgba(74, 222, 128, 0.5);
+          }
+        }
+        
+        @media (prefers-reduced-motion: no-preference) {
+          .animate-fade-in-down {
+            animation: fadeInDown 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .animate-fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .animate-fade-in-left {
+            animation: fadeInLeft 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .animate-fade-in-right {
+            animation: fadeInRight 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .animate-scale-in {
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          }
+          
+          .animate-count-up {
+            animation: countUp 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .stagger-item {
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+          }
+          
+          .stat-card {
+            will-change: transform, box-shadow;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .stat-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+          }
+          
+          .property-card {
+            will-change: transform, box-shadow;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .property-card:hover {
+            transform: translateY(-8px);
+          }
+          
+          .property-card:hover .property-image {
+            transform: scale(1.05);
+          }
+          
+          .property-image {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .action-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .action-card:hover {
+            transform: translateX(8px);
+            background: #234439;
+          }
+          
+          .action-icon {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .action-card:hover .action-icon {
+            transform: scale(1.15) rotate(5deg);
+          }
+          
+          .button-interactive {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .button-interactive:hover {
+            transform: scale(1.05);
+          }
+          
+          .button-interactive:active {
+            transform: scale(0.95);
+          }
+          
+          .chart-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          }
+          
+          .chart-point {
+            opacity: 0;
+            animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          }
+          
+          .revenue-card {
+            animation: pulse-glow 3s ease-in-out infinite;
+          }
+          
+          .metric-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .metric-card:hover {
+            transform: translateY(-4px);
+            background: #234439;
+          }
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+
       <section className="bg-gradient-to-br from-[#1a3a2e] via-[#2d5a45] to-[#1a3a2e] py-8 sm:py-12 lg:py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-6 sm:mb-8">
+          <div className="mb-6 sm:mb-8 animate-fade-in-down">
             <div className="text-sm text-green-300 mb-2">
               RANTAU / <span className="text-white">Kost Owner</span>
             </div>
@@ -152,26 +382,27 @@ export default function KostOwner() {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-[#2d5a45] rounded-2xl p-4 sm:p-6 border border-green-700/30 hover:border-green-500/50 transition-all"
+                className="stat-card bg-[#2d5a45] rounded-2xl p-4 sm:p-6 border border-green-700/30 hover:border-green-500/50 stagger-item"
+                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1}s` }}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg`}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg transition-transform duration-300 hover:scale-110 hover:rotate-3`}
                   >
                     {stat.icon}
                   </div>
                   {index === 0 && (
-                    <span className="text-xs text-green-300">
+                    <span className="text-xs text-green-300 animate-count-up" style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1 + 0.3}s` }}>
                       {stat.changeLabel}
                     </span>
                   )}
                   {index > 0 && (
-                    <span className="text-xs text-green-300">
+                    <span className="text-xs text-green-300 animate-count-up" style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1 + 0.3}s` }}>
                       {stat.changeLabel}
                     </span>
                   )}
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                <div className="text-2xl sm:text-3xl font-bold text-white mb-1 animate-count-up" style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1 + 0.2}s` }}>
                   {stat.label}
                 </div>
                 {stat.sublabel && (
@@ -188,7 +419,7 @@ export default function KostOwner() {
       <section className="py-8 sm:py-12 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-[#2d5a45] rounded-3xl p-6 sm:p-8 border border-green-700/30">
+            <div className="lg:col-span-2 bg-[#2d5a45] rounded-3xl p-6 sm:p-8 border border-green-700/30 animate-fade-in-left" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">
@@ -198,41 +429,28 @@ export default function KostOwner() {
                     Pendapatan meningkat 12% bulan ini
                   </p>
                 </div>
-                <button className="flex items-center justify-center gap-2 bg-[#1a3a2e] text-white px-3 sm:px-4 py-2 rounded-lg text-sm hover:bg-[#152d24] transition-all">
+                <button className="button-interactive flex items-center justify-center gap-2 bg-[#1a3a2e] text-white px-3 sm:px-4 py-2 rounded-lg text-sm hover:bg-[#152d24]">
                   Last 7 days
                   <ChevronDown className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="bg-[#1a3a2e] rounded-2xl p-4 sm:p-6 mb-6">
+              <div className="bg-[#1a3a2e] rounded-2xl p-4 sm:p-6 mb-6 revenue-card">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                  <div>
-                    <div className="text-green-300 text-xs mb-1">Hari Ini</div>
-                    <div className="text-white font-bold text-lg sm:text-xl">
-                      Rp 8.5M
+                  {[
+                    { label: "Hari Ini", value: "Rp 8.5M", highlight: false },
+                    { label: "Minggu Ini", value: "Rp 52M", highlight: false },
+                    { label: "Bulan Ini", value: "Rp 48.5M", highlight: true },
+                    { label: "Growth", value: "+12%", highlight: false, isGrowth: true },
+                  ].map((item, index) => (
+                    <div key={index} className="stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.4 + index * 0.1}s` }}>
+                      <div className="text-green-300 text-xs mb-1">{item.label}</div>
+                      <div className={`font-bold text-lg sm:text-xl flex items-center justify-center gap-1 ${item.highlight ? "text-yellow-400" : item.isGrowth ? "text-green-400" : "text-white"}`}>
+                        {item.isGrowth && <TrendingUp className="w-4 h-4" />}
+                        {item.value}
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <div className="text-green-300 text-xs mb-1">
-                      Minggu Ini
-                    </div>
-                    <div className="text-white font-bold text-lg sm:text-xl">
-                      Rp 52M
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-green-300 text-xs mb-1">Bulan Ini</div>
-                    <div className="text-yellow-400 font-bold text-lg sm:text-xl">
-                      Rp 48.5M
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-green-300 text-xs mb-1">Growth</div>
-                    <div className="text-green-400 font-bold text-lg sm:text-xl flex items-center justify-center gap-1">
-                      <TrendingUp className="w-4 h-4" />
-                      +12%
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
@@ -291,6 +509,8 @@ export default function KostOwner() {
                       <path
                         d="M 0,250 L 100,200 L 200,180 L 300,150 L 400,170 L 500,120 L 600,100 L 700,50 L 700,300 L 0,300 Z"
                         fill="url(#areaGradient)"
+                        className="animate-fade-in-up"
+                        style={{ animationDelay: prefersReducedMotion ? "0s" : "0.5s" }}
                       />
 
                       <polyline
@@ -300,24 +520,30 @@ export default function KostOwner() {
                         strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="chart-line"
                       />
 
                       {[
-                        { x: 0, y: 250, value: "1.5M" },
-                        { x: 100, y: 200, value: "3M" },
-                        { x: 200, y: 180, value: "3.5M" },
-                        { x: 300, y: 150, value: "4.5M" },
-                        { x: 400, y: 170, value: "4M" },
-                        { x: 500, y: 120, value: "5.5M" },
-                        { x: 600, y: 100, value: "6.5M" },
-                        { x: 700, y: 50, value: "8.5M" },
+                        { x: 0, y: 250 },
+                        { x: 100, y: 200 },
+                        { x: 200, y: 180 },
+                        { x: 300, y: 150 },
+                        { x: 400, y: 170 },
+                        { x: 500, y: 120 },
+                        { x: 600, y: 100 },
+                        { x: 700, y: 50 },
                       ].map((point, i) => (
-                        <g key={i}>
-                          ircle cx={point.x}
+                        <circle
+                          key={i}
+                          cx={point.x}
                           cy={point.y}
-                          r="6" fill="#1a3a2e" stroke="#4ade80" strokeWidth="3"
-                          /
-                        </g>
+                          r="6"
+                          fill="#1a3a2e"
+                          stroke="#4ade80"
+                          strokeWidth="3"
+                          className="chart-point"
+                          style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.8 + i * 0.1}s` }}
+                        />
                       ))}
                     </svg>
 
@@ -336,25 +562,25 @@ export default function KostOwner() {
               </div>
 
               <div className="grid grid-cols-3 gap-3 mt-6">
-                <div className="bg-[#1a3a2e] rounded-xl p-3 sm:p-4 text-center">
-                  <div className="text-2xl sm:text-3xl mb-1">📈</div>
-                  <div className="text-green-300 text-xs mb-1">Peak Day</div>
-                  <div className="text-white font-bold text-sm">Sunday</div>
-                </div>
-                <div className="bg-[#1a3a2e] rounded-xl p-3 sm:p-4 text-center">
-                  <div className="text-2xl sm:text-3xl mb-1">💰</div>
-                  <div className="text-green-300 text-xs mb-1">Avg/Day</div>
-                  <div className="text-white font-bold text-sm">Rp 5.2M</div>
-                </div>
-                <div className="bg-[#1a3a2e] rounded-xl p-3 sm:p-4 text-center">
-                  <div className="text-2xl sm:text-3xl mb-1">🎯</div>
-                  <div className="text-green-300 text-xs mb-1">Target</div>
-                  <div className="text-white font-bold text-sm">95%</div>
-                </div>
+                {[
+                  { emoji: "📈", label: "Peak Day", value: "Sunday" },
+                  { emoji: "💰", label: "Avg/Day", value: "Rp 5.2M" },
+                  { emoji: "🎯", label: "Target", value: "95%" },
+                ].map((metric, index) => (
+                  <div
+                    key={index}
+                    className="metric-card bg-[#1a3a2e] rounded-xl p-3 sm:p-4 text-center stagger-item"
+                    style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.6 + index * 0.1}s` }}
+                  >
+                    <div className="text-2xl sm:text-3xl mb-1 transition-transform duration-300 hover:scale-125">{metric.emoji}</div>
+                    <div className="text-green-300 text-xs mb-1">{metric.label}</div>
+                    <div className="text-white font-bold text-sm">{metric.value}</div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="bg-[#2d5a45] rounded-3xl p-6 sm:p-8 border border-green-700/30">
+            <div className="bg-[#2d5a45] rounded-3xl p-6 sm:p-8 border border-green-700/30 animate-fade-in-right" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.3s" }}>
               <h2 className="text-xl sm:text-2xl font-bold text-white mb-6">
                 Quick Actions
               </h2>
@@ -363,10 +589,11 @@ export default function KostOwner() {
                   <Link
                     key={index}
                     to={action.link}
-                    className="flex items-center gap-3 bg-[#1a3a2e] hover:bg-[#234439] p-4 rounded-xl transition-all group"
+                    className="action-card flex items-center gap-3 bg-[#1a3a2e] p-4 rounded-xl group stagger-item"
+                    style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.4 + index * 0.1}s` }}
                   >
                     <div
-                      className={`w-10 h-10 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform`}
+                      className={`action-icon w-10 h-10 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center text-white shadow-lg`}
                     >
                       {action.icon}
                     </div>
@@ -383,35 +610,40 @@ export default function KostOwner() {
 
       <section className="py-8 sm:py-12 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4 animate-fade-in-up">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
               Your Properties
             </h2>
-            <button className="flex items-center gap-2 bg-forest-main hover:bg-forest-dark text-white px-4 py-2 rounded-lg text-sm transition-all">
+            <button className="button-interactive flex items-center gap-2 bg-forest-main hover:bg-forest-dark text-white px-4 py-2 rounded-lg text-sm">
               All Status
               <ChevronDown className="w-4 h-4" />
             </button>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {properties.map((property) => (
+            {properties.map((property, index) => (
               <div
                 key={property.id}
-                className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all border-2 border-gray-200 hover:border-forest-main/30"
+                id={`property-${property.id}`}
+                ref={(el) => (cardsRef.current[property.id] = el)}
+                className={`property-card bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl border-2 border-gray-200 hover:border-forest-main/30 ${
+                  visibleCards.has(`property-${property.id}`) ? "stagger-item" : "opacity-0"
+                }`}
+                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.15}s` }}
               >
                 <div className="relative h-48 sm:h-56 overflow-hidden">
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${property.gradient}`}
+                    className={`property-image absolute inset-0 bg-gradient-to-br ${property.gradient}`}
                   ></div>
                   <div className="absolute inset-0 bg-black/20"></div>
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
                     {property.status}
                   </div>
                 </div>
 
                 <div className="p-5 sm:p-6">
                   <div className="mb-4">
-                    <h3 className="font-bold text-gray-900 text-lg sm:text-xl mb-1">
+                    <h3 className="font-bold text-gray-900 text-lg sm:text-xl mb-1 transition-colors duration-300 hover:text-forest-main">
                       {property.name}
                     </h3>
                     <div className="flex items-center gap-2 text-gray-600 text-sm">
@@ -421,7 +653,7 @@ export default function KostOwner() {
                   </div>
 
                   <div className="flex items-center gap-2 mb-4">
-                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 transition-transform duration-300 hover:scale-125" />
                     <span className="text-gray-900 font-semibold">
                       {property.rating}
                     </span>
@@ -430,7 +662,7 @@ export default function KostOwner() {
                     </span>
                   </div>
 
-                  <div className="bg-gray-50 rounded-xl p-4 mb-4">
+                  <div className="bg-gray-50 rounded-xl p-4 mb-4 transition-colors duration-300 hover:bg-gray-100">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <div className="text-gray-600 text-xs mb-1">Rooms</div>
@@ -450,15 +682,15 @@ export default function KostOwner() {
                   </div>
 
                   <div className="flex gap-3">
-                    <button className="flex-1 bg-forest-main hover:bg-forest-dark text-white px-4 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2">
+                    <button className="button-interactive flex-1 bg-forest-main hover:bg-forest-dark text-white px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2">
                       <Edit className="w-4 h-4" />
                       Edit
                     </button>
-                    <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2">
+                    <button className="button-interactive flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2">
                       <Eye className="w-4 h-4" />
                       View
                     </button>
-                    <button className="bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all">
+                    <button className="button-interactive bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2.5 rounded-lg font-semibold text-sm">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
