@@ -17,7 +17,9 @@ export default function Forum() {
   const [showNewPost, setShowNewPost] = useState(false);
   const [visiblePosts, setVisiblePosts] = useState(new Set());
   const postsRef = useRef({});
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
   const categories = [
     { id: "all", label: "Semua Post", icon: "📋", count: 1234 },
@@ -159,7 +161,7 @@ export default function Forum() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -170,7 +172,7 @@ export default function Forum() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes slideInLeft {
           from {
             opacity: 0;
@@ -181,7 +183,7 @@ export default function Forum() {
             transform: translateX(0);
           }
         }
-        
+
         @keyframes scaleIn {
           from {
             opacity: 0;
@@ -192,7 +194,7 @@ export default function Forum() {
             transform: scale(1);
           }
         }
-        
+
         @keyframes shimmer {
           0% {
             background-position: -1000px 0;
@@ -201,7 +203,7 @@ export default function Forum() {
             background-position: 1000px 0;
           }
         }
-        
+
         @keyframes float {
           0%, 100% {
             transform: translateY(0px);
@@ -210,7 +212,7 @@ export default function Forum() {
             transform: translateY(-8px);
           }
         }
-        
+
         @keyframes glow {
           0%, 100% {
             box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
@@ -219,68 +221,68 @@ export default function Forum() {
             box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
           }
         }
-        
+
         @media (prefers-reduced-motion: no-preference) {
           .animate-fade-in-down {
             animation: fadeInDown 0.6s cubic-bezier(0.23, 1, 0.320, 1) forwards;
           }
-          
+
           .animate-fade-in-up {
             animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.320, 1) forwards;
           }
-          
+
           .animate-scale-in {
             animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
           }
-          
+
           .stagger-item {
             opacity: 0;
             animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.320, 1) forwards;
           }
-          
+
           .post-card {
             will-change: transform, box-shadow;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .post-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
           }
-          
+
           .button-interactive {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .button-interactive:hover {
             transform: scale(1.05);
           }
-          
+
           .button-interactive:active {
             transform: scale(0.95);
           }
-          
+
           .category-btn {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .category-btn.active {
             animation: glow 2s ease-in-out infinite;
           }
-          
+
           .trending-badge {
             animation: float 2s ease-in-out infinite;
           }
-          
+
           .search-input {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .search-input:focus {
             box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
           }
         }
-        
+
         @media (prefers-reduced-motion: reduce) {
           * {
             animation-duration: 0.01ms !important;
@@ -306,7 +308,10 @@ export default function Forum() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+          <div
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-3xl mx-auto animate-fade-in-up"
+            style={{ animationDelay: "0.2s" }}
+          >
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
               <input
@@ -339,7 +344,11 @@ export default function Forum() {
                     ? "bg-forest-main text-white shadow-lg"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
-                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.05}s` }}
+                style={{
+                  animationDelay: prefersReducedMotion
+                    ? "0s"
+                    : `${index * 0.05}s`,
+                }}
               >
                 <span className="text-base sm:text-lg">{category.icon}</span>
                 <span className="hidden sm:inline">{category.label}</span>
@@ -363,7 +372,10 @@ export default function Forum() {
 
       <section className="py-8 sm:py-12 lg:py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-3 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+          <div
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-3 animate-fade-in-up"
+            style={{ animationDelay: "0.1s" }}
+          >
             <h2 className="font-heading text-xl sm:text-2xl font-bold text-gray-900">
               {filteredPosts.length} Diskusi Ditemukan
             </h2>
@@ -387,9 +399,15 @@ export default function Forum() {
                 id={`post-${post.id}`}
                 ref={(el) => (postsRef.current[post.id] = el)}
                 className={`bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-md hover:shadow-xl cursor-pointer border-2 border-transparent hover:border-forest-main/20 post-card ${
-                  visiblePosts.has(`post-${post.id}`) ? "stagger-item" : "opacity-0"
+                  visiblePosts.has(`post-${post.id}`)
+                    ? "stagger-item"
+                    : "opacity-0"
                 }`}
-                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1}s` }}
+                style={{
+                  animationDelay: prefersReducedMotion
+                    ? "0s"
+                    : `${index * 0.1}s`,
+                }}
               >
                 <div className="flex items-start gap-3 sm:gap-4 mb-4">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-forest-main to-gold flex items-center justify-center text-white font-bold flex-shrink-0 text-sm sm:text-base transition-transform duration-300 hover:scale-110">
@@ -453,7 +471,10 @@ export default function Forum() {
             ))}
           </div>
 
-          <div className="mt-8 sm:mt-12 text-center animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+          <div
+            className="mt-8 sm:mt-12 text-center animate-fade-in-up"
+            style={{ animationDelay: "0.2s" }}
+          >
             <button className="button-interactive bg-forest-main hover:bg-forest-dark text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base shadow-lg hover:shadow-xl">
               Muat Lebih Banyak
             </button>
@@ -477,7 +498,10 @@ export default function Forum() {
             </div>
 
             <form className="space-y-4 sm:space-y-6">
-              <div className="stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}>
+              <div
+                className="stagger-item"
+                style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}
+              >
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Kategori
                 </label>
@@ -491,7 +515,12 @@ export default function Forum() {
                 </select>
               </div>
 
-              <div className="stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.15s" }}>
+              <div
+                className="stagger-item"
+                style={{
+                  animationDelay: prefersReducedMotion ? "0s" : "0.15s",
+                }}
+              >
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Judul
                 </label>
@@ -502,7 +531,10 @@ export default function Forum() {
                 />
               </div>
 
-              <div className="stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}>
+              <div
+                className="stagger-item"
+                style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}
+              >
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Konten
                 </label>
@@ -513,7 +545,12 @@ export default function Forum() {
                 ></textarea>
               </div>
 
-              <div className="flex flex-col-reverse sm:flex-row gap-3 stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.25s" }}>
+              <div
+                className="flex flex-col-reverse sm:flex-row gap-3 stagger-item"
+                style={{
+                  animationDelay: prefersReducedMotion ? "0s" : "0.25s",
+                }}
+              >
                 <button
                   type="button"
                   onClick={() => setShowNewPost(false)}

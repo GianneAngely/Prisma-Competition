@@ -18,7 +18,9 @@ import {
 export default function KostOwner() {
   const [visibleCards, setVisibleCards] = useState(new Set());
   const cardsRef = useRef({});
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
   const stats = [
     {
@@ -170,7 +172,7 @@ export default function KostOwner() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -181,7 +183,7 @@ export default function KostOwner() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes fadeInLeft {
           from {
             opacity: 0;
@@ -192,7 +194,7 @@ export default function KostOwner() {
             transform: translateX(0);
           }
         }
-        
+
         @keyframes fadeInRight {
           from {
             opacity: 0;
@@ -203,7 +205,7 @@ export default function KostOwner() {
             transform: translateX(0);
           }
         }
-        
+
         @keyframes scaleIn {
           from {
             opacity: 0;
@@ -214,7 +216,7 @@ export default function KostOwner() {
             transform: scale(1);
           }
         }
-        
+
         @keyframes countUp {
           from {
             opacity: 0;
@@ -225,7 +227,7 @@ export default function KostOwner() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes drawLine {
           from {
             stroke-dashoffset: 1000;
@@ -234,7 +236,7 @@ export default function KostOwner() {
             stroke-dashoffset: 0;
           }
         }
-        
+
         @keyframes pulse-glow {
           0%, 100% {
             box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
@@ -243,118 +245,118 @@ export default function KostOwner() {
             box-shadow: 0 0 25px rgba(74, 222, 128, 0.5);
           }
         }
-        
+
         @media (prefers-reduced-motion: no-preference) {
           .animate-fade-in-down {
             animation: fadeInDown 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .animate-fade-in-up {
             animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .animate-fade-in-left {
             animation: fadeInLeft 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .animate-fade-in-right {
             animation: fadeInRight 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .animate-scale-in {
             animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
           }
-          
+
           .animate-count-up {
             animation: countUp 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .stagger-item {
             opacity: 0;
             animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .stat-card {
             will-change: transform, box-shadow;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .stat-card:hover {
             transform: translateY(-4px) scale(1.02);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
           }
-          
+
           .property-card {
             will-change: transform, box-shadow;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .property-card:hover {
             transform: translateY(-8px);
           }
-          
+
           .property-card:hover .property-image {
             transform: scale(1.05);
           }
-          
+
           .property-image {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .action-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .action-card:hover {
             transform: translateX(8px);
             background: #234439;
           }
-          
+
           .action-icon {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .action-card:hover .action-icon {
             transform: scale(1.15) rotate(5deg);
           }
-          
+
           .button-interactive {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .button-interactive:hover {
             transform: scale(1.05);
           }
-          
+
           .button-interactive:active {
             transform: scale(0.95);
           }
-          
+
           .chart-line {
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
             animation: drawLine 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
           }
-          
+
           .chart-point {
             opacity: 0;
             animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
           }
-          
+
           .revenue-card {
             animation: pulse-glow 3s ease-in-out infinite;
           }
-          
+
           .metric-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .metric-card:hover {
             transform: translateY(-4px);
             background: #234439;
           }
         }
-        
+
         @media (prefers-reduced-motion: reduce) {
           * {
             animation-duration: 0.01ms !important;
@@ -383,7 +385,11 @@ export default function KostOwner() {
               <div
                 key={index}
                 className="stat-card bg-[#2d5a45] rounded-2xl p-4 sm:p-6 border border-green-700/30 hover:border-green-500/50 stagger-item"
-                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1}s` }}
+                style={{
+                  animationDelay: prefersReducedMotion
+                    ? "0s"
+                    : `${index * 0.1}s`,
+                }}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div
@@ -392,17 +398,38 @@ export default function KostOwner() {
                     {stat.icon}
                   </div>
                   {index === 0 && (
-                    <span className="text-xs text-green-300 animate-count-up" style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1 + 0.3}s` }}>
+                    <span
+                      className="text-xs text-green-300 animate-count-up"
+                      style={{
+                        animationDelay: prefersReducedMotion
+                          ? "0s"
+                          : `${index * 0.1 + 0.3}s`,
+                      }}
+                    >
                       {stat.changeLabel}
                     </span>
                   )}
                   {index > 0 && (
-                    <span className="text-xs text-green-300 animate-count-up" style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1 + 0.3}s` }}>
+                    <span
+                      className="text-xs text-green-300 animate-count-up"
+                      style={{
+                        animationDelay: prefersReducedMotion
+                          ? "0s"
+                          : `${index * 0.1 + 0.3}s`,
+                      }}
+                    >
                       {stat.changeLabel}
                     </span>
                   )}
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-white mb-1 animate-count-up" style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1 + 0.2}s` }}>
+                <div
+                  className="text-2xl sm:text-3xl font-bold text-white mb-1 animate-count-up"
+                  style={{
+                    animationDelay: prefersReducedMotion
+                      ? "0s"
+                      : `${index * 0.1 + 0.2}s`,
+                  }}
+                >
                   {stat.label}
                 </div>
                 {stat.sublabel && (
@@ -419,7 +446,10 @@ export default function KostOwner() {
       <section className="py-8 sm:py-12 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-[#2d5a45] rounded-3xl p-6 sm:p-8 border border-green-700/30 animate-fade-in-left" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}>
+            <div
+              className="lg:col-span-2 bg-[#2d5a45] rounded-3xl p-6 sm:p-8 border border-green-700/30 animate-fade-in-left"
+              style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}
+            >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">
@@ -441,11 +471,34 @@ export default function KostOwner() {
                     { label: "Hari Ini", value: "Rp 8.5M", highlight: false },
                     { label: "Minggu Ini", value: "Rp 52M", highlight: false },
                     { label: "Bulan Ini", value: "Rp 48.5M", highlight: true },
-                    { label: "Growth", value: "+12%", highlight: false, isGrowth: true },
+                    {
+                      label: "Growth",
+                      value: "+12%",
+                      highlight: false,
+                      isGrowth: true,
+                    },
                   ].map((item, index) => (
-                    <div key={index} className="stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.4 + index * 0.1}s` }}>
-                      <div className="text-green-300 text-xs mb-1">{item.label}</div>
-                      <div className={`font-bold text-lg sm:text-xl flex items-center justify-center gap-1 ${item.highlight ? "text-yellow-400" : item.isGrowth ? "text-green-400" : "text-white"}`}>
+                    <div
+                      key={index}
+                      className="stagger-item"
+                      style={{
+                        animationDelay: prefersReducedMotion
+                          ? "0s"
+                          : `${0.4 + index * 0.1}s`,
+                      }}
+                    >
+                      <div className="text-green-300 text-xs mb-1">
+                        {item.label}
+                      </div>
+                      <div
+                        className={`font-bold text-lg sm:text-xl flex items-center justify-center gap-1 ${
+                          item.highlight
+                            ? "text-yellow-400"
+                            : item.isGrowth
+                            ? "text-green-400"
+                            : "text-white"
+                        }`}
+                      >
                         {item.isGrowth && <TrendingUp className="w-4 h-4" />}
                         {item.value}
                       </div>
@@ -510,7 +563,9 @@ export default function KostOwner() {
                         d="M 0,250 L 100,200 L 200,180 L 300,150 L 400,170 L 500,120 L 600,100 L 700,50 L 700,300 L 0,300 Z"
                         fill="url(#areaGradient)"
                         className="animate-fade-in-up"
-                        style={{ animationDelay: prefersReducedMotion ? "0s" : "0.5s" }}
+                        style={{
+                          animationDelay: prefersReducedMotion ? "0s" : "0.5s",
+                        }}
                       />
 
                       <polyline
@@ -542,7 +597,11 @@ export default function KostOwner() {
                           stroke="#4ade80"
                           strokeWidth="3"
                           className="chart-point"
-                          style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.8 + i * 0.1}s` }}
+                          style={{
+                            animationDelay: prefersReducedMotion
+                              ? "0s"
+                              : `${0.8 + i * 0.1}s`,
+                          }}
                         />
                       ))}
                     </svg>
@@ -570,17 +629,30 @@ export default function KostOwner() {
                   <div
                     key={index}
                     className="metric-card bg-[#1a3a2e] rounded-xl p-3 sm:p-4 text-center stagger-item"
-                    style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.6 + index * 0.1}s` }}
+                    style={{
+                      animationDelay: prefersReducedMotion
+                        ? "0s"
+                        : `${0.6 + index * 0.1}s`,
+                    }}
                   >
-                    <div className="text-2xl sm:text-3xl mb-1 transition-transform duration-300 hover:scale-125">{metric.emoji}</div>
-                    <div className="text-green-300 text-xs mb-1">{metric.label}</div>
-                    <div className="text-white font-bold text-sm">{metric.value}</div>
+                    <div className="text-2xl sm:text-3xl mb-1 transition-transform duration-300 hover:scale-125">
+                      {metric.emoji}
+                    </div>
+                    <div className="text-green-300 text-xs mb-1">
+                      {metric.label}
+                    </div>
+                    <div className="text-white font-bold text-sm">
+                      {metric.value}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-[#2d5a45] rounded-3xl p-6 sm:p-8 border border-green-700/30 animate-fade-in-right" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.3s" }}>
+            <div
+              className="bg-[#2d5a45] rounded-3xl p-6 sm:p-8 border border-green-700/30 animate-fade-in-right"
+              style={{ animationDelay: prefersReducedMotion ? "0s" : "0.3s" }}
+            >
               <h2 className="text-xl sm:text-2xl font-bold text-white mb-6">
                 Quick Actions
               </h2>
@@ -590,7 +662,11 @@ export default function KostOwner() {
                     key={index}
                     to={action.link}
                     className="action-card flex items-center gap-3 bg-[#1a3a2e] p-4 rounded-xl group stagger-item"
-                    style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.4 + index * 0.1}s` }}
+                    style={{
+                      animationDelay: prefersReducedMotion
+                        ? "0s"
+                        : `${0.4 + index * 0.1}s`,
+                    }}
                   >
                     <div
                       className={`action-icon w-10 h-10 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center text-white shadow-lg`}
@@ -627,9 +703,15 @@ export default function KostOwner() {
                 id={`property-${property.id}`}
                 ref={(el) => (cardsRef.current[property.id] = el)}
                 className={`property-card bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl border-2 border-gray-200 hover:border-forest-main/30 ${
-                  visibleCards.has(`property-${property.id}`) ? "stagger-item" : "opacity-0"
+                  visibleCards.has(`property-${property.id}`)
+                    ? "stagger-item"
+                    : "opacity-0"
                 }`}
-                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.15}s` }}
+                style={{
+                  animationDelay: prefersReducedMotion
+                    ? "0s"
+                    : `${index * 0.15}s`,
+                }}
               >
                 <div className="relative h-48 sm:h-56 overflow-hidden">
                   <div

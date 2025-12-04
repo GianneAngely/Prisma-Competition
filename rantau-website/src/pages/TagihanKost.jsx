@@ -28,7 +28,9 @@ export default function SplitReminder() {
   const [selectedBill, setSelectedBill] = useState(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [activeTab, setActiveTab] = useState("current");
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
   const paymentMethods = [
     {
@@ -216,7 +218,7 @@ export default function SplitReminder() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -227,7 +229,7 @@ export default function SplitReminder() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes fadeInLeft {
           from {
             opacity: 0;
@@ -238,7 +240,7 @@ export default function SplitReminder() {
             transform: translateX(0);
           }
         }
-        
+
         @keyframes fadeInRight {
           from {
             opacity: 0;
@@ -249,7 +251,7 @@ export default function SplitReminder() {
             transform: translateX(0);
           }
         }
-        
+
         @keyframes scaleIn {
           from {
             opacity: 0;
@@ -260,7 +262,7 @@ export default function SplitReminder() {
             transform: scale(1);
           }
         }
-        
+
         @keyframes slideUp {
           from {
             opacity: 0;
@@ -271,7 +273,7 @@ export default function SplitReminder() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes pulse-urgent {
           0%, 100% {
             box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
@@ -280,7 +282,7 @@ export default function SplitReminder() {
             box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
           }
         }
-        
+
         @keyframes bounce-subtle {
           0%, 100% {
             transform: translateY(0);
@@ -289,7 +291,7 @@ export default function SplitReminder() {
             transform: translateY(-4px);
           }
         }
-        
+
         @keyframes ring {
           0% {
             transform: rotate(0deg);
@@ -319,175 +321,175 @@ export default function SplitReminder() {
             transform: rotate(0deg);
           }
         }
-        
+
         @media (prefers-reduced-motion: no-preference) {
           .animate-fade-in-down {
             animation: fadeInDown 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .animate-fade-in-up {
             animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .animate-fade-in-left {
             animation: fadeInLeft 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .animate-fade-in-right {
             animation: fadeInRight 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .animate-scale-in {
             animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
           }
-          
+
           .animate-slide-up {
             animation: slideUp 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .stagger-item {
             opacity: 0;
             animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .bill-animate {
             animation: fadeInUp 0.4s cubic-bezier(0.23, 1, 0.32, 1) both;
           }
-          
+
           .stat-card {
             will-change: transform, box-shadow;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .stat-card:hover {
             transform: translateY(-6px) scale(1.02);
             box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15);
           }
-          
+
           .stat-card:hover .stat-icon {
             transform: scale(1.1) rotate(5deg);
           }
-          
+
           .stat-icon {
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
           }
-          
+
           .bill-card {
             will-change: transform, box-shadow;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .bill-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
           }
-          
+
           .bill-card.urgent {
             animation: pulse-urgent 2s ease-in-out infinite;
           }
-          
+
           .bill-icon {
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
           }
-          
+
           .bill-card:hover .bill-icon {
             transform: scale(1.15);
           }
-          
+
           .reminder-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .reminder-card:hover {
             transform: translateX(4px);
           }
-          
+
           .reminder-card.urgent {
             animation: pulse-urgent 2s ease-in-out infinite;
           }
-          
+
           .avatar-bounce {
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
           }
-          
+
           .avatar-bounce:hover {
             transform: translateY(-4px) scale(1.1);
           }
-          
+
           .button-interactive {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .button-interactive:hover {
             transform: scale(1.05);
           }
-          
+
           .button-interactive:active {
             transform: scale(0.95);
           }
-          
+
           .tab-button {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .tab-button:hover:not(.active) {
             transform: translateY(-2px);
           }
-          
+
           .tab-button.active {
             box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
           }
-          
+
           .payment-method {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .payment-method:hover {
             transform: translateY(-2px);
           }
-          
+
           .payment-method.selected {
             animation: bounce-subtle 0.5s ease-in-out;
           }
-          
+
           .payment-icon {
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
           }
-          
+
           .payment-method:hover .payment-icon {
             transform: scale(1.1);
           }
-          
+
           .modal-overlay {
             animation: fadeInUp 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
           }
-          
+
           .modal-content {
             animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
           }
-          
+
           .bell-ring {
             animation: ring 2s ease-in-out infinite;
           }
-          
+
           .group-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .group-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
           }
-          
+
           .roommate-status {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           }
-          
+
           .roommate-status:hover {
             transform: scale(1.05);
           }
         }
-        
+
         @media (prefers-reduced-motion: reduce) {
           * {
             animation-duration: 0.01ms !important;
@@ -513,7 +515,11 @@ export default function SplitReminder() {
               <div
                 key={index}
                 className="stat-card bg-white rounded-2xl p-4 sm:p-6 shadow-xl stagger-item"
-                style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1}s` }}
+                style={{
+                  animationDelay: prefersReducedMotion
+                    ? "0s"
+                    : `${index * 0.1}s`,
+                }}
               >
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <div
@@ -557,7 +563,10 @@ export default function SplitReminder() {
                 </button>
               </div>
 
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide animate-fade-in-up" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}>
+              <div
+                className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide animate-fade-in-up"
+                style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}
+              >
                 {[
                   { id: "current", label: "Tagihan Aktif (4)" },
                   { id: "pending", label: "Belum Bayar (2)" },
@@ -597,10 +606,14 @@ export default function SplitReminder() {
                           isUrgent
                             ? "border-red-300 bg-red-50 urgent"
                             : bill.status === "paid"
-                              ? "border-green-200 bg-green-50"
-                              : "border-gray-200"
+                            ? "border-green-200 bg-green-50"
+                            : "border-gray-200"
                         }`}
-                        style={{ animationDelay: prefersReducedMotion ? "0s" : `${index * 0.1}s` }}
+                        style={{
+                          animationDelay: prefersReducedMotion
+                            ? "0s"
+                            : `${index * 0.1}s`,
+                        }}
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center gap-3 sm:gap-4">
@@ -656,8 +669,8 @@ export default function SplitReminder() {
                               {daysUntil > 0
                                 ? `${daysUntil} hari`
                                 : daysUntil === 0
-                                  ? "Hari ini"
-                                  : "Terlambat"}
+                                ? "Hari ini"
+                                : "Terlambat"}
                             </div>
                           </div>
                         </div>
@@ -674,7 +687,7 @@ export default function SplitReminder() {
                           <div className="grid grid-cols-4 gap-2">
                             {roommates.map((roommate) => {
                               const hasPaid = bill.paidBy.includes(
-                                roommate.name,
+                                roommate.name
                               );
                               return (
                                 <div
@@ -723,7 +736,7 @@ export default function SplitReminder() {
                       </div>
                     );
                   })}
-                
+
                 {/* Show empty state if no bills */}
                 {currentBills.filter((bill) => {
                   if (activeTab === "pending") return bill.status === "pending";
@@ -738,7 +751,10 @@ export default function SplitReminder() {
             </div>
 
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-gray-200 animate-fade-in-right" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}>
+              <div
+                className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border-2 border-gray-200 animate-fade-in-right"
+                style={{ animationDelay: prefersReducedMotion ? "0s" : "0.2s" }}
+              >
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-bold text-gray-900 text-base sm:text-lg flex items-center gap-2">
                     <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gold bell-ring" />
@@ -758,7 +774,11 @@ export default function SplitReminder() {
                           ? "bg-red-50 border-red-300 urgent"
                           : "bg-gray-50 border-gray-200"
                       }`}
-                      style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.3 + index * 0.1}s` }}
+                      style={{
+                        animationDelay: prefersReducedMotion
+                          ? "0s"
+                          : `${0.3 + index * 0.1}s`,
+                      }}
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1 min-w-0">
@@ -788,7 +808,10 @@ export default function SplitReminder() {
                 </button>
               </div>
 
-              <div className="group-card bg-gradient-to-br from-forest-main to-forest-light rounded-2xl p-4 sm:p-6 text-white shadow-xl animate-fade-in-right" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.4s" }}>
+              <div
+                className="group-card bg-gradient-to-br from-forest-main to-forest-light rounded-2xl p-4 sm:p-6 text-white shadow-xl animate-fade-in-right"
+                style={{ animationDelay: prefersReducedMotion ? "0s" : "0.4s" }}
+              >
                 <h3 className="font-bold text-lg sm:text-xl mb-4">
                   Kelola Grup
                 </h3>
@@ -797,7 +820,11 @@ export default function SplitReminder() {
                     <div
                       key={roommate.name}
                       className={`avatar-bounce w-8 h-8 sm:w-10 sm:h-10 rounded-full ${roommate.color} border-2 border-white flex items-center justify-center text-xs sm:text-sm font-bold stagger-item`}
-                      style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.5 + index * 0.1}s` }}
+                      style={{
+                        animationDelay: prefersReducedMotion
+                          ? "0s"
+                          : `${0.5 + index * 0.1}s`,
+                      }}
                     >
                       {roommate.avatar}
                     </div>
@@ -834,7 +861,10 @@ export default function SplitReminder() {
               </button>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-4 mb-6 stagger-item" style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}>
+            <div
+              className="bg-gray-50 rounded-2xl p-4 mb-6 stagger-item"
+              style={{ animationDelay: prefersReducedMotion ? "0s" : "0.1s" }}
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-sm text-gray-600 mb-1">
@@ -844,7 +874,9 @@ export default function SplitReminder() {
                     Rp {selectedBill.yourShare.toLocaleString("id-ID")}
                   </div>
                 </div>
-                <div className="text-3xl sm:text-4xl bill-icon">{selectedBill.icon}</div>
+                <div className="text-3xl sm:text-4xl bill-icon">
+                  {selectedBill.icon}
+                </div>
               </div>
               <div className="text-xs text-gray-500 mt-2">
                 Tagihan {selectedBill.name} - Split {selectedBill.splitCount}{" "}
@@ -862,7 +894,11 @@ export default function SplitReminder() {
                       ? "border-forest-main bg-forest-main/5 selected"
                       : "border-gray-200 hover:border-gray-300 bg-white"
                   }`}
-                  style={{ animationDelay: prefersReducedMotion ? "0s" : `${0.15 + index * 0.05}s` }}
+                  style={{
+                    animationDelay: prefersReducedMotion
+                      ? "0s"
+                      : `${0.15 + index * 0.05}s`,
+                  }}
                 >
                   <div className="flex items-center gap-4">
                     <div
