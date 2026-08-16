@@ -1,160 +1,127 @@
-````markdown
-# RANTAU - Ruang Temu Anak Perantau 🌏
+# RANTAU — Ruang Temu Anak Perantau 🌏
 
-![RANTAU Logo](public/logo%20rantau%20baru-nobg.png)
+![RANTAU Logo](rantau-website/public/logo%20rantau%20baru-nobg.png)
 
-**RANTAU** adalah platform web komprehensif yang dirancang khusus untuk mahasiswa dan pekerja perantau. Aplikasi ini mengintegrasikan pencarian tempat tinggal (kost), pencarian teman sekamar (roommate) yang cocok menggunakan algoritma kompatibilitas, manajemen tagihan bersama, serta forum komunitas untuk berbagi informasi seputar kehidupan di tanah rantau.
+**RANTAU** is a web platform built for students and workers living away from their hometown. It brings four things that are normally scattered across group chats and spreadsheets into one place: finding a boarding house (*kost*), finding a compatible roommate, splitting shared bills, and a community forum for everything else.
 
-## ✨ Fitur Utama
+Built as our team entry for the **PRISMA Competition 2025**.
+
+## ✨ Features
 
 ### 🏠 Smart Kost Finder
-Pencarian kost cerdas yang tidak hanya menampilkan daftar, tetapi membantu pengguna menemukan tempat tinggal terbaik.
-- **Interactive Map:** Eksplorasi lokasi kost menggunakan peta interaktif (Leaflet).
-- **Personalized Quiz:** Rekomendasi kost berdasarkan preferensi budget, lokasi kampus, dan fasilitas.
-- **Detailed Filters:** Filter berdasarkan harga, fasilitas, jarak ke kampus, dan rating.
-- **Direct Chat:** Fitur chat simulasi dengan pemilik kost.
+
+More than a listing page. It helps you actually decide where to live.
+
+- **Interactive map** for exploring kost locations, powered by Leaflet
+- **Personalised quiz** that recommends places based on budget, campus, and facilities
+- **Detailed filters** for price, facilities, distance to campus, and rating
+- **Direct chat** simulation with the property owner
 
 ### 🤝 Roommate Matcher
-Temukan teman sekamar yang sefrekuensi untuk menghindari konflik di kemudian hari.
-- **Compatibility Algorithm:** Mencocokkan pengguna berdasarkan gaya hidup (jam tidur, kebersihan, tingkat sosial, kebiasaan belajar).
-- **Match Percentage:** Menampilkan persentase kecocokan antar pengguna.
-- **Verified Profiles:** Menampilkan status verifikasi mahasiswa untuk keamanan.
 
-### 💸 Tagihan Kost (Bill Splitter)
-Kelola keuangan bersama teman sekamar tanpa drama.
-- **Split Bill Otomatis:** Membagi tagihan listrik, air, internet, dll secara adil.
-- **Payment Tracking:** Melacak status pembayaran (Lunas/Belum).
-- **Auto Reminder:** Pengingat jatuh tempo tagihan.
+Find someone you can actually live with, before you sign anything.
 
-### 💬 Forum Komunitas
-Ruang diskusi untuk saling membantu sesama perantau.
-- **Kategori Beragam:** Tips hemat, info beasiswa, lowongan part-time, review kost, dan event.
-- **Trending Topics:** Lihat diskusi yang sedang hangat.
+- **Compatibility algorithm** that scores lifestyle fit across sleep schedule, cleanliness, sociability, and study habits
+- **Match percentage** shown between users
+- **Verified profiles** with student verification status
+
+### 💸 Bill Splitter (Tagihan Kost)
+
+Shared finances without the awkward conversations.
+
+- **Automatic splitting** for electricity, water, internet, and other shared costs
+- **Payment tracking** so everyone can see who has settled up
+- **Due date reminders**
+
+### 💬 Community Forum
+
+- **Categories** covering budget tips, scholarship info, part-time jobs, kost reviews, and events
+- **Trending topics**
 
 ### 🏢 Kost Owner Dashboard
-Fitur khusus untuk pemilik properti (UMKM).
-- **Manajemen Properti:** Tambah dan edit listing kost.
-- **Analytics:** Pantau performa listing dan okupansi kamar.
 
----
+For the property owners themselves, most of whom are small businesses.
 
-## 🛠 Teknologi yang Digunakan
+- **Property management** to add and edit listings
+- **Analytics** for listing performance and room occupancy
 
-Project ini dibangun menggunakan modern web stack:
+## 🛠 Built with
 
-- **Core:** [React](https://react.dev/) (v19)
-- **Build Tool:** [Vite](https://vitejs.dev/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Animations:** [Framer Motion](https://www.framer.com/motion/) (untuk transisi halaman dan interaksi UI yang halus)
-- **Maps:** [Leaflet](https://leafletjs.com/) & [React Leaflet](https://react-leaflet.js.org/)
-- **Routing:** [React Router DOM](https://reactrouter.com/)
-- **Icons:** [Lucide React](https://lucide.dev/)
+- **[React](https://react.dev/)** (v19)
+- **[Vite](https://vitejs.dev/)** for the dev server and build
+- **[Tailwind CSS](https://tailwindcss.com/)** for styling
+- **[Framer Motion](https://www.framer.com/motion/)** for page transitions and UI interactions
+- **[Leaflet](https://leafletjs.com/)** and **[React Leaflet](https://react-leaflet.js.org/)** for maps
+- **[React Router](https://reactrouter.com/)** for routing
+- **[Lucide](https://lucide.dev/)** for icons
 
----
+## 🚀 Running it locally
 
-## 📋 Prasyarat Instalasi
+Requires **Node.js 18** or newer.
 
-Sebelum memulai, pastikan Anda telah menginstal:
+```bash
+git clone https://github.com/GianneAngely/Prisma-Competition-2025-Rantau.git
+cd Prisma-Competition-2025-Rantau/rantau-website
+npm install
+npm run dev
+```
 
-- **Node.js** (Versi 18 atau lebih baru disarankan)
-- **npm** (biasanya terinstall bersama Node.js)
+Vite prints a local URL when it starts, usually `http://localhost:5173`.
 
----
+## 📂 Project structure
 
-## 🚀 Cara Instalasi dan Menjalankan
-
-Ikuti langkah-langkah berikut untuk menjalankan proyek ini di komputer lokal Anda:
-
-1.  **Clone Repository**
-    ```bash
-    git clone [https://github.com/username/Prisma-Competition.git](https://github.com/username/Prisma-Competition.git)
-    cd Prisma-Competition/rantau-website
-    ```
-
-2.  **Instal Dependencies**
-    ```bash
-    npm install
-    ```
-
-3.  **Jalankan Development Server**
-    ```bash
-    npm run dev
-    ```
-
-4.  **Buka Aplikasi**
-    Buka browser Anda dan akses tautan yang muncul di terminal (biasanya `http://localhost:5173`).
-
----
-
-## 📂 Susunan Project
-
-Berikut adalah struktur folder utama dari proyek ini:
-
-
+```
 rantau-website/
-├── public/                 \# Aset statis (Logo, favicon)
+├── public/                      # Static assets (logo, favicon)
 ├── src/
-│   ├── assets/             \# Aset gambar/svg komponen
-│   ├── components/         \# Komponen UI yang dapat digunakan kembali
-│   │   ├── Header.jsx      \# Navigasi atas
-│   │   ├── MobileBottomNav.jsx \# Navigasi bawah (mobile)
-│   │   ├── KostCard.jsx    \# Kartu listing kost
-│   │   ├── RoommateCard.jsx \# Kartu profil roommate
+│   ├── assets/                  # Component images and SVGs
+│   ├── components/              # Reusable UI components
+│   │   ├── Header.jsx           # Top navigation
+│   │   ├── MobileBottomNav.jsx  # Bottom navigation (mobile)
+│   │   ├── KostCard.jsx         # Kost listing card
+│   │   ├── RoommateCard.jsx     # Roommate profile card
 │   │   └── ...
-│   ├── data/               \# Data dummy (Mock data)
-│   │   ├── kosts.js        \# Data dummy kost
-│   │   ├── roommates.js    \# Data dummy profil roommate
-│   │   └── forumPost.js    \# Data dummy forum
-│   ├── pages/              \# Halaman utama aplikasi
-│   │   ├── Home.jsx        \# Landing page
-│   │   ├── SmartKostFinder.jsx \# Pencarian kost & Peta
-│   │   ├── Roommate.jsx    \# Halaman pencarian teman
-│   │   ├── TagihanKost.jsx \# Halaman manajemen tagihan
-│   │   ├── Forum.jsx       \# Halaman forum
+│   ├── data/                    # Mock data
+│   │   ├── kosts.js
+│   │   ├── roommates.js
+│   │   └── forumPost.js
+│   ├── pages/                   # Application pages
+│   │   ├── Home.jsx             # Landing page
+│   │   ├── SmartKostFinder.jsx  # Kost search and map
+│   │   ├── Roommate.jsx         # Roommate matching
+│   │   ├── TagihanKost.jsx      # Bill management
+│   │   ├── Forum.jsx            # Community forum
 │   │   └── ...
-│   ├── App.jsx             \# Komponen utama & Routing
-│   ├── main.jsx            \# Entry point React
-│   └── index.css           \# Global styles & Tailwind directives
-├── eslint.config.js        \# Konfigurasi Linter
-├── tailwind.config.js      \# Konfigurasi Tailwind CSS
-├── vite.config.js          \# Konfigurasi Vite
-└── package.json            \# Daftar dependensi & skrip
+│   ├── App.jsx                  # Root component and routing
+│   ├── main.jsx                 # React entry point
+│   └── index.css                # Global styles and Tailwind directives
+├── tailwind.config.js
+├── vite.config.js
+└── package.json
+```
 
+## 💡 Walkthrough
 
+**Finding a kost**
+Open **Cari Kost**, then either use the filters on the left or hit "Mulai Survey Personal" for automatic recommendations. Click a pin on the map to see a quick summary.
 
-## 💡 Contoh Penggunaan
+**Finding a roommate**
+Open **Roommate**, click "Mulai Cari Roommate", and answer a short questionnaire about sleep, cleanliness, and social habits. The system returns people ranked by compatibility, for example "93% Match".
 
-1.  **Mencari Kost:**
-    * Buka menu **"Cari Kost"**.
-    * Gunakan filter di sebelah kiri atau klik tombol "Mulai Survey Personal" untuk rekomendasi otomatis.
-    * Klik pin pada peta untuk melihat detail singkat kost.
+**Managing bills**
+Open **Tagihan** to see this month's costs split across housemates. Mark bills as paid or send a reminder.
 
-2.  **Mencari Roommate:**
-    * Buka menu **"Roommate"**.
-    * Klik "Mulai Cari Roommate" dan isi kuesioner singkat tentang kebiasaan tidur, kebersihan, dan sosial.
-    * Sistem akan menampilkan daftar orang dengan persentase kecocokan tertinggi (misal: "93% Match").
+## 📝 Note on the data
 
-3.  **Mengelola Tagihan:**
-    * Masuk ke menu **"Tagihan"**.
-    * Anda dapat melihat tagihan bulan ini (Listrik, WiFi, Air).
-    * Tandai tagihan yang sudah dibayar atau kirim pengingat ke teman sekamar.
+All listings, roommate profiles, and forum posts in this repo are **mock data** used for the competition demo. There is no backend, no database, and no real user accounts.
 
+## 🌏 Note on language
 
-## 🤝 Kontribusi
+The application interface is in Indonesian, since it was built for Indonesian users.
 
-Kontribusi sangat diterima! Jika Anda ingin meningkatkan fitur RANTAU:
+## 📄 License
 
-1.  **Fork** repository ini.
-2.  Buat **Branch** fitur baru (`git checkout -b fitur-keren`).
-3.  **Commit** perubahan Anda (`git commit -m 'Menambahkan fitur keren'`).
-4.  **Push** ke Branch (`git push origin fitur-keren`).
-5.  Buat **Pull Request**.
-
----
-
-## 📄 Lisensi
-
-Proyek ini dilisensikan di bawah **MIT License**.
+Released under the **MIT License**.
 
 ```text
 MIT License
@@ -178,7 +145,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-````
-
-```
 ```
