@@ -6,6 +6,8 @@
 
 Built as our team entry for the **PRISMA Competition 2025**.
 
+![The RANTAU home page](screenshot.png)
+
 ## ✨ Features
 
 ### 🏠 Smart Kost Finder
